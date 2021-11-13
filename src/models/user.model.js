@@ -1,15 +1,13 @@
 const { Schema, model } = require("mongoose");
 const { compare, hash, getSalt } = require("bcryptjs");
-const { USER } = require("./types");
 
-const schemaPropConfig = { type: String, required: true };
+const { USER } = require("./types");
+const { requiredString } = require("./schemasConfig.helper");
 
 const UserSchema = new Schema({
-  name: schemaPropConfig,
-
-  username: schemaPropConfig,
-
-  password: schemaPropConfig,
+  name: requiredString,
+  username: requiredString,
+  password: requiredString,
 });
 
 UserSchema.methods.toJSON = function () {

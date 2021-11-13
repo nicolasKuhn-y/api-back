@@ -1,32 +1,14 @@
 const { Schema, model } = require("mongoose");
 const { USER, COMMENT, IDEA } = require("./types");
-
-// const configProps = (ref) => ({
-//   type: Schema.Types.ObjectId,
-//   ref,
-//   required: true,
-//   autopopulate: true,
-// });
+const { requiredString, defineSchemaField } = require("./schemasConfig.helper");
 
 const IdeaSchema = new Schema({
-  idea: { type: String, required: true },
+  idea: requiredString,
   description: String,
   upvotes: [Boolean],
   downvotes: [Boolean],
-  author: {
-    type: Schema.Types.ObjectId,
-    ref: USER,
-    required: true,
-    autopopulate: true,
-  },
-  commets: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: COMMENT,
-      required: true,
-      autopopulate: true,
-    },
-  ],
+  author: defineSchemaField(USER),
+  commets: defineSchemaField(COMMENT),
 });
 
 IdeaSchema.plugin(require("mongoose-autopopulate"));

@@ -1,15 +1,12 @@
 const { Schema, model } = require("mongoose");
 const { USER, COMMENT } = require("./types");
 
+const { requiredString, defineSchemaField } = require("./schemasConfig.helper");
+
 const CommentSchema = new Schema({
-  commet: { type: String, required: true },
+  commet: requiredString,
   description: String,
-  author: {
-    type: Schema.Types.ObjectId,
-    ref: USER,
-    required: true,
-    autopopulate: true,
-  },
+  author: defineSchemaField(USER),
 });
 
 CommentSchema.plugin(require("mongoose-autopopulate"));
