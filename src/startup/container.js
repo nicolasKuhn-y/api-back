@@ -1,8 +1,8 @@
+const { createContainer, asValue } = require("awilix");
+const { inyectSingletonClass, inyectSingletonFunction } = require("./container.helper");
+
 const config = require("../../config");
 const app = require(".");
-
-// para inyeccion de dependencias
-const { createContainer, asValue, asClass, asFunction } = require("awilix");
 
 //servicios
 const { HomeService } = require("../services");
@@ -15,31 +15,42 @@ const { HomeRoutes } = require("../routes/index.routes");
 const Routes = require("../routes");
 
 //models
-
 const { UserModel, IdeaModel, CommentModel } = require("../models");
+
+//repositories
+const {
+  UserRepository,
+  IdeaRepository,
+  CommentRepository,
+} = require("../repositories");
 
 const container = createContainer();
 
 // dividir cada capa en un register propio
 container
   .register({
-    app: asClass(app).singleton(),
-    router: asFunction(Routes).singleton(),
+    app: inyectSingletonClass(app),
+    router: inyectSingletonFunction(Routes),
     config: asValue(config),
   })
   .register({
-    HomeService: asClass(HomeService).singleton(),
+    HomeService: inyectSingletonClass(HomeService),
   })
   .register({
-    HomeController: asClass(HomeController).singleton(),
+    HomeController: inyectSingletonClass(HomeController),
   })
   .register({
-    HomeRoutes: asFunction(HomeRoutes).singleton(),
+    HomeRoutes: inyectSingletonFunction(HomeRoutes),
   })
   .register({
     UserModel: asValue(UserModel),
     IdeaModel: asValue(IdeaModel),
     CommentModel: asValue(CommentModel),
+  })
+  .register({
+    UserRepository: inyectSingletonClass(UserRepository),
+    IdeaRepository: inyectSingletonClass(IdeaRepository),
+    CommentRepository: inyectSingletonClass(CommentRepository),
   });
 
 module.exports = container;
